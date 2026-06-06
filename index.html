@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Women Safety Assistant – Your Safety, One Tap Away</title>
+  <meta name="description" content="Instant access to emergency assistance, trusted contacts, location sharing, fake calls, and safety resources—all in one premium platform.">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Supabase JS Library CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <!-- jsPDF Library CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  
+  <!-- Tailwind CSS via Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Tailwind Theme Customization -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            emergencyRed: '#FF4D4D',
+            modernPurple: '#8B5CF6',
+            deepBlack: '#0A0A0A',
+            secondBlack: '#121212',
+            cardBg: 'rgba(30, 30, 30, 0.65)'
+          },
+          fontFamily: {
+            outfit: ['Outfit', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-deepBlack text-white min-h-screen relative font-outfit overflow-x-hidden">
+  
+  <!-- Ambient Gradient Background Blobs -->
+  <div class="glow-blob-red top-[-100px] left-[-100px]"></div>
+  <div class="glow-blob-purple top-[400px] right-[-100px]"></div>
+  <div class="glow-blob-red bottom-[800px] left-[10%]"></div>
+  <div class="glow-blob-purple bottom-[100px] right-[20%]"></div>
+
+  <!-- ==================== HEADER / NAVIGATION ==================== -->
+  <header class="glass-navbar sticky top-0 z-40 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Logo -->
+      <a href="#" class="flex items-center gap-2.5 group">
+        <div class="p-2 rounded-xl bg-gradient-to-tr from-emergencyRed to-modernPurple group-hover:scale-105 transition">
+          <i data-lucide="shield-alert" class="w-6 h-6 text-white"></i>
+        </div>
+        <div>
+          <span class="text-white font-extrabold text-lg tracking-tight block">WSA</span>
+          <span class="text-[10px] text-zinc-400 font-bold uppercase tracking-widest leading-none">Safety Assistant</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Menu -->
+      <nav class="hidden lg:flex items-center gap-6 xl:gap-8">
+        <a href="#" class="text-zinc-300 hover:text-white text-sm font-semibold transition">Home</a>
+        <a href="#features" class="text-zinc-300 hover:text-white text-sm font-semibold transition">Features</a>
+        <a href="#emergency-tools" class="text-zinc-300 hover:text-white text-sm font-semibold transition">Emergency Tools</a>
+        <a href="#dashboard" class="text-zinc-300 hover:text-white text-sm font-semibold transition">Dashboard</a>
+        <a href="#awareness" class="text-zinc-300 hover:text-white text-sm font-semibold transition">Awareness Hub</a>
+        <a href="#community" class="text-zinc-300 hover:text-white text-sm font-semibold transition">Community</a>
+        <a href="empowerment.html" class="text-gradient-red-purple hover:underline text-sm font-bold transition flex items-center gap-1">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-modernPurple animate-pulse"></i> Women Empowerment
+        </a>
+      </nav>
+
+      <!-- Desktop Auth / CTA -->
+      <div id="desktop-auth-container" class="hidden lg:flex items-center gap-4">
+        <button onclick="openModal('login-modal')" class="text-zinc-400 hover:text-white text-sm font-semibold px-3 py-2 transition">Login</button>
+        <button onclick="openModal('signup-modal')" class="text-white text-sm font-semibold px-4 py-2 rounded-xl border border-white/10 hover:border-white/20 bg-white/5 hover:bg-white/10 transition">Sign Up</button>
+        <button onclick="triggerSOS()" class="bg-emergencyRed hover:bg-red-600 text-white text-sm font-bold px-5 py-2.5 rounded-xl shadow-lg shadow-red-500/20 hover:scale-[1.02] transition">
+          ACTIVATE SOS
+        </button>
+      </div>
+
+      <!-- Mobile Hamburger Button -->
+      <button id="mobile-menu-btn" onclick="document.getElementById('mobile-menu-dropdown').classList.toggle('hidden')" class="lg:hidden p-2 rounded-xl bg-white/5 border border-white/5 text-zinc-400 hover:text-white">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+      </button>
+
+    </div>
+
+    <!-- Mobile Dropdown Menu -->
+    <div id="mobile-menu-dropdown" class="hidden lg:hidden glass-panel border-b border-white/10 p-5 flex flex-col gap-4 max-w-full">
+      <a href="#" onclick="document.getElementById('mobile-menu-dropdown').classList.add('hidden')" class="text-zinc-300 hover:text-white font-medium text-base">Home</a>
+      <a href="#features" onclick="document.getElementById('mobile-menu-dropdown').classList.add('hidden')" class="text-zinc-300 hover:text-white font-medium text-base">Features</a>
+      <a href="#emergency-tools" onclick="document.getElementById('mobile-menu-dropdown').classList.add('hidden')" class="text-zinc-300 hover:text-white font-medium text-base">Emergency Tools</a>
+      <a href="#dashboard" onclick="document.getElementById('mobile-menu-dropdown').classList.add('hidden')" class="text-zinc-300 hover:text-white font-medium text-base">Dashboard</a>
+      <a href="#awareness" onclick="document.getElementById('mobile-menu-dropdown').classList.add('hidden')" class="text-zinc-300 hover:text-white font-medium text-base">Awareness Hub</a>
+      <a href="#community" onclick="document.getElementById('mobile-menu-dropdown').classList.add('hidden')" class="text-zinc-300 hover:text-white font-medium text-base">Community</a>
+      <a href="empowerment.html" class="text-gradient-red-purple font-bold text-base">Women Empowerment</a>
+      <hr class="border-white/5 my-2">
+      <div class="flex gap-4">
+        <button onclick="document.getElementById('mobile-menu-dropdown').classList.add('hidden'); openModal('login-modal')" class="flex-1 py-2.5 rounded-xl border border-white/10 text-center font-semibold text-sm">Login</button>
+        <button onclick="document.getElementById('mobile-menu-dropdown').classList.add('hidden'); openModal('signup-modal')" class="flex-1 py-2.5 rounded-xl bg-purple-600 text-center font-semibold text-sm">Sign Up</button>
+      </div>
+      <button onclick="document.getElementById('mobile-menu-dropdown').classList.add('hidden'); triggerSOS()" class="w-full py-3 bg-emergencyRed text-white font-bold text-center rounded-xl shadow-lg">
+        ACTIVATE SOS NOW
+      </button>
+    </div>
+  </header>
+
+  <!-- ==================== HERO SECTION ==================== -->
+  <section class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 lg:py-32 flex flex-col lg:flex-row items-center gap-12 z-10">
+    <div class="flex-1 text-center lg:text-left">
+      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emergencyRed/10 border border-emergencyRed/20 text-emergencyRed text-xs font-semibold uppercase tracking-wider mb-6 animate-pulse">
+        <i data-lucide="shield" class="w-3.5 h-3.5"></i> Supabase Connected
+      </span>
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+        Stay Safe. Stay Connected.<br>
+        <span class="text-gradient-red-purple">Stay Empowered.</span>
+      </h1>
+      <p class="text-zinc-400 text-base sm:text-lg max-w-xl mx-auto lg:mx-0 mb-8 leading-relaxed">
+        Instant access to emergency assistance, trusted contacts, location sharing, fake calls, and safety resources—all in one platform.
+      </p>
+      <div class="flex flex-col sm:flex-row justify-center lg:justify-start gap-4">
+        <button onclick="triggerSOS()" class="px-8 py-4 bg-emergencyRed hover:bg-red-600 text-white font-bold rounded-xl shadow-xl shadow-red-500/25 transition transform hover:scale-[1.02] flex items-center justify-center gap-2">
+          <i data-lucide="bell-ring" class="w-5 h-5"></i> Activate SOS Now
+        </button>
+        <a href="#features" class="px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-semibold rounded-xl border border-white/10 hover:border-white/20 transition flex items-center justify-center gap-2">
+          Explore Features <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Right Side Animated Grid Illustration -->
+    <div class="flex-1 relative w-full max-w-md lg:max-w-none flex items-center justify-center select-none">
+      <div class="floating-element relative w-80 h-80 sm:w-96 sm:h-96 rounded-3xl glass-panel border border-white/10 flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-tr from-emergencyRed/10 via-transparent to-modernPurple/15"></div>
+        <!-- Stylized Vector Safety Rings -->
+        <div class="absolute w-72 h-72 rounded-full border border-white/5 animate-spin" style="animation-duration: 30s;"></div>
+        <div class="absolute w-56 h-56 rounded-full border border-white/10 animate-spin" style="animation-duration: 15s; animation-direction: reverse;"></div>
+        <div class="absolute w-40 h-40 rounded-full border border-emergencyRed/20 animate-pulse"></div>
+        
+        <!-- Center Floating Shield -->
+        <div class="relative p-6 rounded-2xl bg-zinc-950/60 border border-white/10 shadow-2xl flex flex-col items-center gap-3">
+          <i data-lucide="shield" class="w-16 h-16 text-modernPurple animate-pulse"></i>
+          <span class="text-white text-sm font-semibold tracking-wider uppercase">Active Security Shield</span>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-green-400 animate-ping"></span>
+            <span class="text-green-400 text-xs font-bold">GPS Guard Active</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Small Floating Helper Badge 1 -->
+      <div class="floating-element-delayed absolute top-4 right-4 glass-panel px-4 py-3 rounded-2xl border border-white/15 flex items-center gap-3 shadow-lg">
+        <div class="p-1.5 rounded-lg bg-green-500/10 text-green-400">
+          <i data-lucide="check-circle" class="w-4 h-4"></i>
+        </div>
+        <div>
+          <span class="text-[10px] text-zinc-500 block uppercase font-bold">Safe Check-In</span>
+          <span class="text-white text-xs font-bold">Verified Status</span>
+        </div>
+      </div>
+      
+      <!-- Small Floating Helper Badge 2 -->
+      <div class="floating-element absolute bottom-6 left-0 glass-panel px-4 py-3 rounded-2xl border border-white/15 flex items-center gap-3 shadow-lg">
+        <div class="p-1.5 rounded-lg bg-emergencyRed/10 text-emergencyRed">
+          <i data-lucide="phone-outgoing" class="w-4 h-4"></i>
+        </div>
+        <div>
+          <span class="text-[10px] text-zinc-500 block uppercase font-bold">Fake Call</span>
+          <span class="text-white text-xs font-bold">Custom Scheduled</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== EMERGENCY QUICK ACCESS ==================== -->
+  <section id="emergency-tools" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 z-10 relative">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      
+      <!-- SOS BUTTON CARD -->
+      <div class="glass-panel p-6 rounded-2xl border border-white/5 flex flex-col justify-between items-center text-center group glass-panel-danger-hover">
+        <div class="mb-4">
+          <h3 class="text-white font-extrabold text-lg">SOS Alarm System</h3>
+          <p class="text-zinc-500 text-xs mt-1">Instant alert broadcast with 5s delay</p>
+        </div>
+        <!-- Large Circular Pulse Button -->
+        <button onclick="triggerSOS()" class="w-24 h-24 rounded-full bg-emergencyRed text-white font-extrabold text-lg flex items-center justify-center sos-pulse-btn my-4 focus:outline-none">
+          SOS
+        </button>
+        <span class="text-zinc-400 text-xs font-medium block">Click to test distress alerts</span>
+      </div>
+
+      <!-- FAKE CALL SIM CARD -->
+      <div class="glass-panel p-6 rounded-2xl border border-white/5 flex flex-col justify-between glass-panel-hover">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h3 class="text-white font-extrabold text-lg">Fake Call Feature</h3>
+            <p class="text-zinc-500 text-xs mt-1">De-escalate uncomfortable spaces</p>
+          </div>
+          <div class="p-2 rounded-lg bg-purple-500/10 text-modernPurple">
+            <i data-lucide="phone" class="w-5 h-5"></i>
+          </div>
+        </div>
+        
+        <div class="my-3 space-y-3">
+          <div>
+            <label class="text-zinc-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Set Delay Timer</label>
+            <select id="fake-call-delay-select" class="w-full bg-zinc-900 border border-white/10 rounded-xl px-3 py-2 text-sm text-zinc-300 focus:outline-none focus:border-purple-500">
+              <option value="5">5 Seconds (Instant)</option>
+              <option value="30">30 Seconds</option>
+              <option value="120">2 Minutes</option>
+              <option value="300">5 Minutes</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-zinc-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Caller Name</label>
+            <input type="text" id="fake-call-name-input" class="w-full bg-zinc-900 border border-white/10 rounded-xl px-3 py-2 text-sm text-zinc-300 focus:outline-none focus:border-purple-500">
+          </div>
+        </div>
+
+        <button onclick="triggerFakeCallNow()" class="w-full py-2.5 rounded-xl font-bold bg-white text-zinc-950 hover:bg-zinc-200 transition text-sm">
+          Schedule Fake Call
+        </button>
+      </div>
+
+      <!-- TRUSTED CONTACTS CARD -->
+      <div class="glass-panel p-6 rounded-2xl border border-white/5 flex flex-col justify-between glass-panel-hover">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h3 class="text-white font-extrabold text-lg">Emergency Contacts</h3>
+            <p class="text-zinc-500 text-xs mt-1">Tap to dial immediately</p>
+          </div>
+          <div class="p-2 rounded-lg bg-green-500/10 text-green-400">
+            <i data-lucide="users" class="w-5 h-5"></i>
+          </div>
+        </div>
+
+        <!-- Short Contacts Grid -->
+        <div id="quick-contacts-grid" class="space-y-2.5 my-3 overflow-y-auto max-h-[120px] pr-1">
+          <!-- Dynamic contents loaded in app.js -->
+        </div>
+
+        <button onclick="openAddContactModal()" class="w-full py-2.5 rounded-xl font-semibold bg-white/5 hover:bg-white/10 border border-white/10 text-white transition text-sm flex items-center justify-center gap-1.5">
+          <i data-lucide="plus" class="w-4 h-4"></i> Add Contact
+        </button>
+      </div>
+
+      <!-- LIVE LOCATION TRACK CARD -->
+      <div class="glass-panel p-6 rounded-2xl border border-white/5 flex flex-col justify-between glass-panel-hover">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h3 class="text-white font-extrabold text-lg">Live Tracker</h3>
+            <p class="text-zinc-500 text-xs mt-1">GPS coordinates tracker</p>
+          </div>
+          <div id="tracking-pulse-indicator" class="hidden flex items-center gap-1">
+            <span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-ping"></span>
+          </div>
+        </div>
+
+        <div class="my-3 p-3 rounded-xl bg-zinc-950/40 border border-white/5 flex flex-col gap-2">
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-zinc-500 font-bold uppercase">Latitude</span>
+            <span id="tracking-lat-val" class="text-zinc-300 font-mono">28.61390</span>
+          </div>
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-zinc-500 font-bold uppercase">Longitude</span>
+            <span id="tracking-lng-val" class="text-zinc-300 font-mono">77.20900</span>
+          </div>
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-zinc-500 font-bold uppercase">Marker</span>
+            <span id="tracking-point-label" class="text-purple-400 font-semibold truncate max-w-[120px]">Connaught Place Hub</span>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <!-- Dedicated family location sharing button with permission checks -->
+          <button id="family-location-share-btn" onclick="requestLocationPermission()" class="w-full py-3 rounded-xl font-bold bg-purple-600 hover:bg-purple-700 text-white transition text-sm shadow-lg shadow-purple-500/20 hover:scale-[1.01]">
+            Share Live Location to Family
+          </button>
+          
+          <div class="flex gap-2">
+            <button onclick="generateSharingLink()" class="flex-1 py-2 rounded-xl font-bold bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border border-white/5 transition text-xs flex items-center justify-center gap-1">
+              <i data-lucide="link" class="w-3.5 h-3.5"></i> Link
+            </button>
+            <button id="location-share-btn" onclick="toggleLocationSharing()" class="flex-1 py-2 rounded-xl font-semibold bg-white/5 hover:bg-white/10 border border-white/10 text-white transition text-xs">
+              Simulator
+            </button>
+          </div>
+          
+          <!-- Sharing Link Input Hidden by Default -->
+          <div class="hidden flex items-center gap-1 mt-1">
+            <input type="text" id="location-share-link-display" readonly class="flex-1 bg-zinc-900 border border-white/10 rounded-lg px-2 py-1 text-[11px] font-mono text-zinc-400 focus:outline-none">
+            <button onclick="copySharingLink()" class="p-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== MAIN CORE FEATURES SECTION ==================== -->
+  <section id="features" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 z-10 relative">
+    <div class="text-center mb-16">
+      <h2 class="text-zinc-500 text-xs font-bold uppercase tracking-widest mb-2">Platform Capabilities</h2>
+      <h3 class="text-3xl md:text-4xl font-extrabold text-white">Startup-Grade Features Hub</h3>
+      <p class="text-zinc-400 text-base max-w-2xl mx-auto mt-4">
+        Every component is crafted with fluid UI/UX practices to ensure immediate access during critical scenarios.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      
+      <!-- Feature Card 1 -->
+      <div class="glass-panel p-6 rounded-2xl border border-white/5 flex gap-4 hover:border-purple-500/20 transition">
+        <div class="p-3.5 h-12 w-12 rounded-xl bg-purple-500/10 text-modernPurple shrink-0">
+          <i data-lucide="touch-pointer" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h4 class="text-white font-bold text-lg">One-Tap SOS Broadcast</h4>
+          <p class="text-zinc-400 text-sm mt-2 leading-relaxed">
+            Sends direct alert messages with your live coordinates and status directly to local authorities and selected guardians.
+          </p>
+        </div>
+      </div>
+
+      <!-- Feature Card 2 -->
+      <div class="glass-panel p-6 rounded-2xl border border-white/5 flex gap-4 hover:border-purple-500/20 transition">
+        <div class="p-3.5 h-12 w-12 rounded-xl bg-purple-500/10 text-modernPurple shrink-0">
+          <i data-lucide="users" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h4 class="text-white font-bold text-lg">Priority Contact Manager</h4>
+          <p class="text-zinc-400 text-sm mt-2 leading-relaxed">
+            Organize and manage contact directories. Set custom Priority Badges (High, Med, Low) indicating alert sequence order.
+          </p>
+        </div>
+      </div>
+
+      <!-- Feature Card 3 -->
+      <div class="glass-panel p-6 rounded-2xl border border-white/5 flex gap-4 hover:border-purple-500/20 transition">
+        <div class="p-3.5 h-12 w-12 rounded-xl bg-purple-500/10 text-modernPurple shrink-0">
+          <i data-lucide="phone-call" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h4 class="text-white font-bold text-lg">Fake Call simulator</h4>
+          <p class="text-zinc-400 text-sm mt-2 leading-relaxed">
+            Escape unwanted scenarios seamlessly. Trigger a realistic simulated call from your chosen authority with a customize timer.
+          </p>
+        </div>
+      </div>
+
+      <!-- Feature Card 4 -->
+      <div class="glass-panel p-6 rounded-2xl border border-white/5 flex gap-4 hover:border-purple-500/20 transition">
+        <div class="p-3.5 h-12 w-12 rounded-xl bg-purple-500/10 text-modernPurple shrink-0">
+          <i data-lucide="map-pin" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h4 class="text-white font-bold text-lg">Live Geolocation Tracking</h4>
+          <p class="text-zinc-400 text-sm mt-2 leading-relaxed">
+            Shares live GPS data logs with family members, using browser tracking coordinates for optimal safety routing.
+          </p>
+        </div>
+      </div>
+
+      <!-- Feature Card 5 -->
+      <div class="glass-panel p-6 rounded-2xl border border-white/5 flex gap-4 hover:border-purple-500/20 transition">
+        <div class="p-3.5 h-12 w-12 rounded-xl bg-purple-500/10 text-modernPurple shrink-0">
+          <i data-lucide="phone-forwarded" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h4 class="text-white font-bold text-lg">Emergency Helplines</h4>
+          <p class="text-zinc-400 text-sm mt-2 leading-relaxed">
+            One-click calling grids linking you immediately to Police, Women Protection cells, Cyber Crime teams, and Medical cells.
+          </p>
+        </div>
+      </div>
+
+      <!-- Feature Card 6 -->
+      <div class="glass-panel p-6 rounded-2xl border border-white/5 flex gap-4 hover:border-purple-500/20 transition">
+        <div class="p-3.5 h-12 w-12 rounded-xl bg-purple-500/10 text-modernPurple shrink-0">
+          <i data-lucide="navigation" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h4 class="text-white font-bold text-lg">Safe Places Finder</h4>
+          <p class="text-zinc-400 text-sm mt-2 leading-relaxed">
+            Map layout grids plotting nearby Police Stations, Hospitals, Safe Women Support zones, and Public transits.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== SIREN & CHECK-IN DUAL DASHBOARD PANEL ==================== -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 z-10 relative">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      
+      <!-- SIREN CONTROLLER PANEL -->
+      <div class="glass-panel p-6 sm:p-8 rounded-3xl border border-white/5 flex flex-col justify-between gap-6">
+        <div>
+          <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-red-500/10 text-red-500 border border-red-500/20 uppercase tracking-wider">
+            Audio Alarm Alert
+          </span>
+          <h3 class="text-2xl font-bold text-white mt-3">Synthesized Distress Siren</h3>
+          <p class="text-zinc-400 text-sm mt-2 leading-relaxed">
+            Generates high-decibel police wailing sound via browser audio synthesizers to draw immediate public attention and disorient intruders.
+          </p>
+        </div>
+        
+        <!-- Animated Wave/Visualizer Mockup -->
+        <div class="h-24 rounded-2xl bg-zinc-950/50 border border-white/5 flex items-center justify-center gap-1.5 p-4 overflow-hidden relative">
+          <div class="absolute inset-0 bg-red-500/5 transition opacity duration-300"></div>
+          <span class="w-1.5 h-6 bg-red-500/40 rounded-full animate-pulse"></span>
+          <span class="w-1.5 h-10 bg-red-500/60 rounded-full animate-pulse" style="animation-delay: 0.1s;"></span>
+          <span class="w-1.5 h-16 bg-red-500/80 rounded-full animate-pulse" style="animation-delay: 0.2s;"></span>
+          <span class="w-1.5 h-20 bg-red-500 rounded-full animate-pulse" style="animation-delay: 0.3s;"></span>
+          <span class="w-1.5 h-16 bg-red-500/80 rounded-full animate-pulse" style="animation-delay: 0.4s;"></span>
+          <span class="w-1.5 h-10 bg-red-500/60 rounded-full animate-pulse" style="animation-delay: 0.5s;"></span>
+          <span class="w-1.5 h-6 bg-red-500/40 rounded-full animate-pulse" style="animation-delay: 0.6s;"></span>
+        </div>
+
+        <button id="section-siren-btn" onclick="toggleSiren()" class="w-full py-4 rounded-xl font-bold bg-emergencyRed hover:bg-red-600 text-white transition duration-300 shadow-lg shadow-red-500/20">
+          Activate Siren
+        </button>
+      </div>
+
+      <!-- SAFETY CHECK-IN COUNTDOWN PANEL -->
+      <div class="glass-panel p-6 sm:p-8 rounded-3xl border border-white/5 flex flex-col justify-between gap-6">
+        <div>
+          <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/10 text-purple-400 border border-purple-500/20 uppercase tracking-wider">
+            Check-In Scheduler
+          </span>
+          <h3 class="text-2xl font-bold text-white mt-3">Periodic Safety Check-In</h3>
+          <p class="text-zinc-400 text-sm mt-2 leading-relaxed">
+            Set safety countdown timers during travels. If not confirmed as "Safe" before the duration finishes, warning alarms trigger.
+          </p>
+        </div>
+
+        <!-- Timer Setup Panel -->
+        <div id="checkin-setup-panel" class="flex flex-col sm:flex-row gap-3 items-center">
+          <div class="flex-1 w-full">
+            <label class="text-zinc-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Select Interval</label>
+            <select id="checkin-timer-input" class="w-full bg-zinc-900 border border-white/10 rounded-xl px-3 py-3 text-sm text-zinc-300 focus:outline-none focus:border-purple-500">
+              <option value="1">1 Minute (For Demo)</option>
+              <option value="5">5 Minutes</option>
+              <option value="15">15 Minutes</option>
+              <option value="30">30 Minutes</option>
+              <option value="60">1 Hour</option>
+            </select>
+          </div>
+          <button onclick="scheduleCheckIn()" class="w-full sm:w-auto px-6 py-3 rounded-xl font-bold bg-purple-600 hover:bg-purple-700 text-white transition duration-300 mt-5">
+            Start Scheduler
+          </button>
+        </div>
+
+        <!-- Timer Active Countdown -->
+        <div id="checkin-countdown-panel" class="hidden flex-col items-center justify-center text-center">
+          <div class="flex items-center justify-center relative mb-4">
+            <svg class="w-32 h-32 transform -rotate-90">
+              <circle class="text-zinc-800" stroke-width="6" stroke="currentColor" fill="transparent" r="54" cx="64" cy="64"/>
+              <circle class="text-purple-500 progress-ring-circle" stroke-width="6" stroke-dasharray="339.29" stroke-dashoffset="339.29" stroke-linecap="round" stroke="currentColor" fill="transparent" r="54" cx="64" cy="64"/>
+            </svg>
+            <div class="absolute flex flex-col items-center justify-center">
+              <span id="checkin-remaining-text" class="text-white font-bold text-xl">00:00</span>
+              <span class="text-zinc-500 text-[10px] uppercase font-bold tracking-wider">Remaining</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 w-full">
+            <button onclick="confirmCheckIn()" class="flex-1 py-2.5 rounded-xl font-semibold bg-green-500 hover:bg-green-600 text-white transition text-sm">
+              Confirm Safe
+            </button>
+            <button onclick="cancelCheckIn()" class="px-4 py-2.5 rounded-xl font-semibold bg-zinc-800 hover:bg-zinc-700 text-zinc-400 transition text-sm">
+              Cancel
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== USER SECURITY DASHBOARD ==================== -->
+  <section id="dashboard" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 z-10 relative">
+    
+    <!-- Dashboard Header with Export PDF Button -->
+    <div class="text-center mb-16 flex flex-col items-center">
+      <h2 class="text-zinc-500 text-xs font-bold uppercase tracking-widest mb-2">Real-time status</h2>
+      <h3 class="text-3xl md:text-4xl font-extrabold text-white">Your Security Dashboard</h3>
+      <p class="text-zinc-400 text-base max-w-2xl mx-auto mt-4 mb-6">
+        Monitor your active safety indices, location feeds, alert transmissions, and live tracking status metrics.
+      </p>
+      
+      <!-- Export PDF Report Button -->
+      <button onclick="exportAndUploadPDFReport()" class="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-sm transition flex items-center gap-2 shadow-lg shadow-purple-500/10 hover:scale-[1.01]">
+        <i data-lucide="file-text" class="w-4 h-4 text-purple-200"></i> Export Safety Report (PDF)
+      </button>
+    </div>
+
+    <!-- Main Status Card -->
+    <div id="dashboard-status-card" class="glass-panel p-5 rounded-2xl border border-green-500/10 bg-green-950/5 flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
+      <div class="flex items-center gap-4 text-center sm:text-left flex-col sm:flex-row">
+        <div id="dashboard-status-icon">
+          <div class="p-3 rounded-full bg-green-500/10 text-green-400">
+            <i data-lucide="shield-check" class="w-8 h-8"></i>
+          </div>
+        </div>
+        <div>
+          <h4 class="text-zinc-400 text-xs font-bold uppercase tracking-wider">Overall Safety State</h4>
+          <span id="dashboard-status-text" class="text-green-400 font-extrabold text-lg">System Secured</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="w-3.5 h-3.5 rounded-full bg-green-500 animate-ping"></span>
+        <span class="text-zinc-300 text-sm font-semibold">Active Monitoring Enabled</span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      
+      <!-- Stats and Analytics Chart (Left/Center Column) -->
+      <div class="lg:col-span-2 flex flex-col gap-6">
+        
+        <!-- Stats Mini Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="glass-panel p-5 rounded-2xl border border-white/5">
+            <span class="text-zinc-500 text-xs font-bold uppercase tracking-wider block">Guardians Linked</span>
+            <span id="stats-contacts-count" class="text-white text-3xl font-extrabold block mt-2">3</span>
+            <span class="text-zinc-400 text-xs mt-1 block">Active priority alerts</span>
+          </div>
+          <div class="glass-panel p-5 rounded-2xl border border-white/5">
+            <span class="text-zinc-500 text-xs font-bold uppercase tracking-wider block">Safety Sharing</span>
+            <span id="stats-sharing-active" class="text-zinc-500 text-3xl font-extrabold block mt-2">Off</span>
+            <span class="text-zinc-400 text-xs mt-1 block">Live location link status</span>
+          </div>
+          <div class="glass-panel p-5 rounded-2xl border border-white/5">
+            <span class="text-zinc-500 text-xs font-bold uppercase tracking-wider block">Logs Recorded</span>
+            <span id="stats-logs-count" class="text-white text-3xl font-extrabold block mt-2">3</span>
+            <span class="text-zinc-400 text-xs mt-1 block">Session security logs</span>
+          </div>
+        </div>
+
+        <!-- Custom SVG Safety Index Line Chart -->
+        <div class="glass-panel p-6 rounded-2xl border border-white/5">
+          <div class="flex items-center justify-between mb-6">
+            <div>
+              <h4 class="text-white font-bold text-base">Safety Level Metrics</h4>
+              <p class="text-zinc-500 text-xs">Safety index logs over past 7 cycles</p>
+            </div>
+            <span class="px-2.5 py-0.5 rounded bg-zinc-800 text-zinc-300 text-xs font-semibold">Live Feed</span>
+          </div>
+          <div id="svg-chart-container" class="h-44 w-full flex items-center justify-center">
+            <!-- SVG Chart rendered inside app.js -->
+          </div>
+        </div>
+
+        <!-- Location Tracker Map Mockup Section -->
+        <div class="glass-panel p-6 rounded-2xl border border-white/5">
+          <h4 class="text-white font-bold text-base mb-4">Live Route Map Visualization</h4>
+          <div class="h-64 rounded-xl bg-zinc-950 border border-white/5 overflow-hidden relative flex items-center justify-center">
+            
+            <!-- SVG Styled Vector Grid Map -->
+            <svg class="absolute inset-0 w-full h-full opacity-40" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                  <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#222" stroke-width="1"/>
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#grid)" />
+              
+              <!-- Draw Simulated Walk Road Paths -->
+              <path d="M 50 150 L 100 120 L 150 90 L 200 110 L 250 70 L 300 90 L 355 50" fill="none" stroke="#333" stroke-width="6" stroke-linecap="round"/>
+              <path d="M 50 150 L 100 120 L 150 90 L 200 110 L 250 70 L 300 90 L 355 50" class="map-path-draw" fill="none" stroke="#8B5CF6" stroke-dasharray="1000" stroke-dashoffset="1000" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            
+            <div class="absolute text-[10px] text-zinc-600 font-bold" style="left: 10%; bottom: 18%;">Start Zone</div>
+            <div class="absolute text-[10px] text-zinc-600 font-bold" style="left: 48%; top: 40%;">Metro Point</div>
+            <div class="absolute text-[10px] text-green-500 font-bold flex items-center gap-1" style="right: 8%; top: 22%;">
+              <i data-lucide="shield-check" class="w-3 h-3"></i> Safe Hub
+            </div>
+
+            <!-- Pulsing Location Dot -->
+            <div id="map-live-pulse-dot" class="map-pulse-dot absolute transition-all duration-1000" style="left: 18%; top: 68%;"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Action logs and Contacts Manager (Right Column) -->
+      <div class="flex flex-col gap-6">
+        
+        <!-- Live Action Activity Log -->
+        <div class="glass-panel p-6 rounded-2xl border border-white/5 flex-1 flex flex-col justify-between">
+          <div>
+            <h4 class="text-white font-bold text-base mb-4">Security Incident Logs</h4>
+            <div id="activity-log-container" class="space-y-3 max-h-[350px] overflow-y-auto pr-1">
+              <!-- Dynamic Logs loaded inside app.js -->
+            </div>
+          </div>
+          <button onclick="localStorage.setItem('wsa_logs', '[]'); addLog('Logs cleared.', 'info');" class="text-zinc-500 hover:text-zinc-300 text-xs font-semibold mt-4 text-left transition">
+            Clear Security Logs
+          </button>
+        </div>
+
+        <!-- Trusted Contacts List CRUD View -->
+        <div class="glass-panel p-6 rounded-2xl border border-white/5 flex-1 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center mb-4">
+              <h4 class="text-white font-bold text-base">Trusted Guardians</h4>
+              <button onclick="openAddContactModal()" class="text-xs font-bold text-modernPurple hover:text-purple-400 transition">Manage All</button>
+            </div>
+            <div id="dashboard-contacts-list" class="space-y-3">
+              <!-- Dynamic Contact items loaded in app.js -->
+            </div>
+          </div>
+          <button onclick="openAddContactModal()" class="w-full py-2.5 rounded-xl font-bold bg-white/5 border border-white/10 hover:bg-white/10 text-white transition text-xs mt-4 flex items-center justify-center gap-1.5">
+            <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Add Guardian
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== EMERGENCY HELPLINES & SAFE PLACES ==================== -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 z-10 relative">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      
+      <!-- Helpline Call Grid (Direct tel: linking for immediate calls) -->
+      <div class="glass-panel p-6 sm:p-8 rounded-3xl border border-white/5 flex flex-col justify-between gap-6">
+        <div>
+          <h3 class="text-2xl font-bold text-white">Emergency Helplines</h3>
+          <p class="text-zinc-400 text-sm mt-2 leading-relaxed">
+            Clicking helicards will direct you directly to your device's native dial pad.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          
+          <!-- Police -->
+          <div class="glass-panel p-4 rounded-xl border border-white/5 flex items-center justify-between hover:border-red-500/20 transition group">
+            <div>
+              <h4 class="text-white font-bold text-sm">Police Department</h4>
+              <span class="text-red-400 font-bold text-base block mt-1">112</span>
+            </div>
+            <a href="tel:112" onclick="addLog('Directly dialed emergency Police helpline (112).', 'warning')" class="p-3 rounded-xl bg-red-500/10 text-red-500 group-hover:bg-red-500 group-hover:text-white transition">
+              <i data-lucide="phone-call" class="w-5 h-5"></i>
+            </a>
+          </div>
+
+          <!-- Women Helpline -->
+          <div class="glass-panel p-4 rounded-xl border border-white/5 flex items-center justify-between hover:border-red-500/20 transition group">
+            <div>
+              <h4 class="text-white font-bold text-sm">Women Help Cell</h4>
+              <span class="text-red-400 font-bold text-base block mt-1">1091</span>
+            </div>
+            <a href="tel:1091" onclick="addLog('Directly dialed Women Help Cell (1091).', 'warning')" class="p-3 rounded-xl bg-red-500/10 text-red-500 group-hover:bg-red-500 group-hover:text-white transition">
+              <i data-lucide="phone-call" class="w-5 h-5"></i>
+            </a>
+          </div>
+
+          <!-- Ambulance -->
+          <div class="glass-panel p-4 rounded-xl border border-white/5 flex items-center justify-between hover:border-red-500/20 transition group">
+            <div>
+              <h4 class="text-white font-bold text-sm">Ambulance Services</h4>
+              <span class="text-red-400 font-bold text-base block mt-1">102</span>
+            </div>
+            <a href="tel:102" onclick="addLog('Directly dialed Ambulance Services (102).', 'warning')" class="p-3 rounded-xl bg-red-500/10 text-red-500 group-hover:bg-red-500 group-hover:text-white transition">
+              <i data-lucide="phone-call" class="w-5 h-5"></i>
+            </a>
+          </div>
+
+          <!-- Cyber Crime -->
+          <div class="glass-panel p-4 rounded-xl border border-white/5 flex items-center justify-between hover:border-red-500/20 transition group">
+            <div>
+              <h4 class="text-white font-bold text-sm">Cyber Crime Cell</h4>
+              <span class="text-red-400 font-bold text-base block mt-1">1930</span>
+            </div>
+            <a href="tel:1930" onclick="addLog('Directly dialed Cyber Crime Cell (1930).', 'warning')" class="p-3 rounded-xl bg-red-500/10 text-red-500 group-hover:bg-red-500 group-hover:text-white transition">
+              <i data-lucide="phone-call" class="w-5 h-5"></i>
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Safe Places -->
+      <div class="glass-panel p-6 sm:p-8 rounded-3xl border border-white/5 flex flex-col justify-between gap-6">
+        <div>
+          <h3 class="text-2xl font-bold text-white">Nearby Safe Places</h3>
+          <p class="text-zinc-400 text-sm mt-2 leading-relaxed">
+            Locate surrounding public zones verified with security details.
+          </p>
+        </div>
+
+        <div class="space-y-3">
+          
+          <div class="flex items-center justify-between p-3.5 rounded-xl bg-zinc-900/40 border border-white/5">
+            <div class="flex items-center gap-3">
+              <div class="p-2.5 rounded-lg bg-purple-500/10 text-modernPurple">
+                <i data-lucide="shield" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h4 class="text-white font-semibold text-sm">Connaught Place Police HQ</h4>
+                <p class="text-zinc-500 text-xs mt-0.5">Verified Station • 0.8 km</p>
+              </div>
+            </div>
+            <button onclick="showToast('Navigating to Station...', 'success')" class="text-xs font-bold text-modernPurple hover:underline">Get Route</button>
+          </div>
+
+          <div class="flex items-center justify-between p-3.5 rounded-xl bg-zinc-900/40 border border-white/5">
+            <div class="flex items-center gap-3">
+              <div class="p-2.5 rounded-lg bg-green-500/10 text-green-400">
+                <i data-lucide="heart-pulse" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h4 class="text-white font-semibold text-sm">RML Emergency Hospital</h4>
+                <p class="text-zinc-500 text-xs mt-0.5">24/7 Medical Room • 1.4 km</p>
+              </div>
+            </div>
+            <button onclick="showToast('Navigating to Hospital...', 'success')" class="text-xs font-bold text-modernPurple hover:underline">Get Route</button>
+          </div>
+
+          <div class="flex items-center justify-between p-3.5 rounded-xl bg-zinc-900/40 border border-white/5">
+            <div class="flex items-center gap-3">
+              <div class="p-2.5 rounded-lg bg-blue-500/10 text-blue-400">
+                <i data-lucide="map-pin" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h4 class="text-white font-semibold text-sm">Rajiv Chowk Public Transit</h4>
+                <p class="text-zinc-500 text-xs mt-0.5">Crowded Metro Hub • 0.3 km</p>
+              </div>
+            </div>
+            <button onclick="showToast('Navigating to Metro...', 'success')" class="text-xs font-bold text-modernPurple hover:underline">Get Route</button>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== SAFETY AWARENESS HUB ==================== -->
+  <section id="awareness" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 z-10 relative">
+    <div class="text-center mb-12">
+      <h2 class="text-zinc-500 text-xs font-bold uppercase tracking-widest mb-2">Knowledge Base</h2>
+      <h3 class="text-3xl md:text-4xl font-extrabold text-white">Safety Awareness Hub</h3>
+      <p class="text-zinc-400 text-base max-w-2xl mx-auto mt-4">
+        Read guides, legal protections, and self-defense practices curated by security professionals.
+      </p>
+    </div>
+
+    <!-- Article Controls -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10 pb-6 border-b border-white/5">
+      
+      <div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-none">
+        <button onclick="filterSafetyArticles('all')" data-category="all" class="safety-filter-tab px-4 py-2 rounded-xl text-sm font-semibold transition bg-purple-600 text-white">All</button>
+        <button onclick="filterSafetyArticles('defense')" data-category="defense" class="safety-filter-tab px-4 py-2 rounded-xl text-sm font-semibold transition bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-white">Self Defense</button>
+        <button onclick="filterSafetyArticles('travel')" data-category="travel" class="safety-filter-tab px-4 py-2 rounded-xl text-sm font-semibold transition bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-white">Travel Safety</button>
+        <button onclick="filterSafetyArticles('online')" data-category="online" class="safety-filter-tab px-4 py-2 rounded-xl text-sm font-semibold transition bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-white">Online Security</button>
+        <button onclick="filterSafetyArticles('legal')" data-category="legal" class="safety-filter-tab px-4 py-2 rounded-xl text-sm font-semibold transition bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-white">Legal Rights</button>
+      </div>
+
+      <div class="relative w-full md:max-w-xs">
+        <input type="text" id="safety-search-input" oninput="searchSafetyArticles()" placeholder="Search articles..." class="w-full bg-zinc-900 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-sm text-zinc-300 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500">
+        <i data-lucide="search" class="w-4 h-4 text-zinc-500 absolute left-3.5 top-3.5"></i>
+      </div>
+
+    </div>
+
+    <!-- Articles Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      
+      <!-- Article 1 -->
+      <div class="glass-panel rounded-2xl border border-white/5 overflow-hidden flex flex-col justify-between safety-article-card" data-category="defense">
+        <div class="p-6">
+          <span class="text-purple-400 text-xs font-bold uppercase tracking-wider block mb-3">Self Defense</span>
+          <h4 class="article-title text-white font-bold text-lg mb-2">Essential Physical Self-Defense Moves</h4>
+          <p class="article-desc text-zinc-400 text-sm leading-relaxed mb-4">
+            Learn the key physical counters to unlock yourself from holds, escape grips, and strike vulnerable areas.
+          </p>
+        </div>
+        <div class="px-6 py-4 border-t border-white/5 bg-zinc-950/25 flex items-center justify-between text-xs text-zinc-500">
+          <span>5 min read</span>
+          <button onclick="showToast('Loading full article text...', 'info')" class="font-bold text-modernPurple hover:underline">Read Now</button>
+        </div>
+      </div>
+
+      <!-- Article 2 -->
+      <div class="glass-panel rounded-2xl border border-white/5 overflow-hidden flex flex-col justify-between safety-article-card" data-category="travel">
+        <div class="p-6">
+          <span class="text-purple-400 text-xs font-bold uppercase tracking-wider block mb-3">Travel Safety</span>
+          <h4 class="article-title text-white font-bold text-lg mb-2">Secured Transit Checklists at Night</h4>
+          <p class="article-desc text-zinc-400 text-sm leading-relaxed mb-4">
+            How to verify rideshare details, coordinate sharing status, and select seating locations for safety.
+          </p>
+        </div>
+        <div class="px-6 py-4 border-t border-white/5 bg-zinc-950/25 flex items-center justify-between text-xs text-zinc-500">
+          <span>8 min read</span>
+          <button onclick="showToast('Loading full article text...', 'info')" class="font-bold text-modernPurple hover:underline">Read Now</button>
+        </div>
+      </div>
+
+      <!-- Article 3 -->
+      <div class="glass-panel rounded-2xl border border-white/5 overflow-hidden flex flex-col justify-between safety-article-card" data-category="legal">
+        <div class="p-6">
+          <span class="text-purple-400 text-xs font-bold uppercase tracking-wider block mb-3">Legal Rights</span>
+          <h4 class="article-title text-white font-bold text-lg mb-2">Zero FIR and Arrest Protections Guide</h4>
+          <p class="article-desc text-zinc-400 text-sm leading-relaxed mb-4">
+            Understand your rights under modern criminal codes including virtual complaints and zero FIR filings.
+          </p>
+        </div>
+        <div class="px-6 py-4 border-t border-white/5 bg-zinc-950/25 flex items-center justify-between text-xs text-zinc-500">
+          <span>6 min read</span>
+          <button onclick="showToast('Loading full article text...', 'info')" class="font-bold text-modernPurple hover:underline">Read Now</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== COMMUNITY SECTION ==================== -->
+  <section id="community" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 z-10 relative">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      
+      <!-- Community Thread/Forum -->
+      <div class="lg:col-span-2 flex flex-col gap-6">
+        <div>
+          <h2 class="text-zinc-500 text-xs font-bold uppercase tracking-widest mb-2">Community Alert Hub</h2>
+          <h3 class="text-3xl font-extrabold text-white">Shared Awareness Feed</h3>
+          <p class="text-zinc-400 text-sm mt-2">
+            Share local status alerts and stories completely anonymously with nearby members.
+          </p>
+        </div>
+
+        <form onsubmit="addCommunityPost(event)" class="glass-panel p-5 rounded-2xl border border-white/5 flex flex-col gap-4">
+          <textarea id="community-post-text" placeholder="Share a local alert, suspicious activity, or self defense experience anonymously..." rows="3" required class="w-full bg-zinc-900/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-zinc-200 focus:outline-none focus:border-purple-500 placeholder-zinc-600 resize-none"></textarea>
+          <div class="flex items-center justify-between">
+            <span class="text-zinc-500 text-xs flex items-center gap-1">
+              <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Posted anonymously
+            </span>
+            <button type="submit" class="px-5 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-sm transition">
+              Share Alert
+            </button>
+          </div>
+        </form>
+
+        <!-- Feed List -->
+        <div id="community-posts-container" class="space-y-4">
+          
+          <div class="glass-panel p-5 rounded-2xl border border-white/5 flex flex-col gap-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center font-bold text-zinc-300">
+                  M
+                </div>
+                <div>
+                  <h4 class="text-white text-sm font-semibold">Anonymous Member</h4>
+                  <span class="text-zinc-500 text-xs">2 hours ago • Delhi Central</span>
+                </div>
+              </div>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20 uppercase">
+                Suspicious Activity
+              </span>
+            </div>
+            <p class="text-zinc-300 text-sm leading-relaxed">
+              Heads up! Suspicious vehicles parked near the Metro Gate 3 exit around Janpath lane. Best to travel in groups or use the well-lit radial streets. Stay safe!
+            </p>
+            <div class="flex items-center gap-6 text-zinc-500 text-sm border-t border-white/5 pt-4 mt-2">
+              <button class="flex items-center gap-2 hover:text-red-400 transition" onclick="togglePostVote(this)">
+                <i data-lucide="heart" class="w-4 h-4"></i>
+                <span>14</span>
+              </button>
+              <button class="flex items-center gap-2 hover:text-purple-400 transition" onclick="showToast('Open Comments mockup.', 'info')">
+                <i data-lucide="message-square" class="w-4 h-4"></i>
+                <span>3 Comments</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-6">
+        
+        <!-- Campaigns/Workshops list -->
+        <div class="glass-panel p-6 rounded-2xl border border-white/5">
+          <h4 class="text-white font-bold text-base mb-4">Safety Workshops</h4>
+          
+          <div class="space-y-4">
+            <div class="p-3.5 rounded-xl bg-zinc-900/40 border border-white/5">
+              <span class="text-purple-400 text-[10px] font-bold uppercase tracking-wider block">June 12 • 4:00 PM</span>
+              <h5 class="text-white font-semibold text-sm mt-1">Virtual Self-Defense Basics</h5>
+              <p class="text-zinc-500 text-xs mt-1">Zoom Seminar • Free Entry</p>
+              <button onclick="showToast('Registered for Self-Defense workshop!', 'success')" class="mt-3 px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-bold text-[10px] uppercase transition">
+                Register
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Premium Testimonials Carousel -->
+        <div class="glass-panel p-6 rounded-2xl border border-white/5 flex-1 flex flex-col justify-between">
+          <h4 class="text-white font-bold text-base mb-4">User Testimonials</h4>
+          
+          <div class="my-4">
+            <i data-lucide="quote" class="w-8 h-8 text-purple-500/20 mb-2"></i>
+            <p class="text-zinc-300 text-sm italic leading-relaxed">
+              "This app gives me immense peace of mind during late-night office returns. The Fake Call and check-in scheduler are highly practical tools."
+            </p>
+            <div class="mt-4 flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 to-red-500 flex items-center justify-center text-xs font-bold text-white">
+                P
+              </div>
+              <div>
+                <h5 class="text-white text-xs font-bold">Priya Sen</h5>
+                <span class="text-zinc-500 text-[10px]">SaaS Engineer</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex gap-1.5 mt-2">
+            <span class="w-2.5 h-1.5 rounded-full bg-purple-500"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-700 cursor-pointer" onclick="showToast('Carousel slide transition mockup.', 'info')"></span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== METRIC STATISTICS ==================== -->
+  <section class="border-y border-white/5 bg-zinc-950/30 py-12 z-10 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      <div>
+        <span class="text-gradient-red-purple text-4xl font-extrabold block">25,000+</span>
+        <span class="text-zinc-500 text-xs uppercase font-bold tracking-wider mt-2 block">Active Protections</span>
+      </div>
+      <div>
+        <span class="text-gradient-red-purple text-4xl font-extrabold block">4.9/5</span>
+        <span class="text-zinc-500 text-xs uppercase font-bold tracking-wider mt-2 block">User Satisfaction Rating</span>
+      </div>
+      <div>
+        <span class="text-gradient-red-purple text-4xl font-extrabold block">1.2s</span>
+        <span class="text-zinc-500 text-xs uppercase font-bold tracking-wider mt-2 block">Alert Dispatch Speed</span>
+      </div>
+      <div>
+        <span class="text-gradient-red-purple text-4xl font-extrabold block">150+</span>
+        <span class="text-zinc-500 text-xs uppercase font-bold tracking-wider mt-2 block">Safe Places Listed</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ABOUT STORYTELLING ==================== -->
+  <section id="about" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 z-10 relative">
+    <div class="flex flex-col lg:flex-row items-center gap-12">
+      <div class="flex-1 text-center lg:text-left">
+        <h2 class="text-zinc-500 text-xs font-bold uppercase tracking-widest mb-2">Our Mission</h2>
+        <h3 class="text-3xl md:text-4xl font-extrabold text-white">Empowering Through Tech</h3>
+        <p class="text-zinc-400 text-base leading-relaxed mt-4 mb-8">
+          Empowering women through technology-driven safety solutions that provide confidence, awareness, and immediate access to emergency support.
+        </p>
+        
+        <div class="space-y-4">
+          <div class="flex gap-4 text-left">
+            <div class="p-2.5 h-10 w-10 rounded-xl bg-purple-500/10 text-modernPurple shrink-0 flex items-center justify-center">
+              <i data-lucide="check-circle" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h5 class="text-white font-bold text-sm">Self Confidence</h5>
+              <p class="text-zinc-500 text-xs mt-1">Fostering tools that let women move freely with technological support systems.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="flex-1 w-full max-w-md lg:max-w-none grid grid-cols-2 gap-4">
+        <div class="glass-panel p-6 rounded-2xl border border-white/5 flex flex-col gap-4 text-center items-center justify-center h-44">
+          <i data-lucide="lock" class="w-8 h-8 text-modernPurple"></i>
+          <span class="text-white text-sm font-semibold">100% Encrypted</span>
+        </div>
+        <div class="glass-panel p-6 rounded-2xl border border-white/5 flex flex-col gap-4 text-center items-center justify-center h-44 mt-6">
+          <i data-lucide="map" class="w-8 h-8 text-modernPurple"></i>
+          <span class="text-white text-sm font-semibold">Offline Maps Ready</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CONTACT & SUPPORT FORM (SUPABASE BACKEND INTEGRATION) ==================== -->
+  <section id="contact" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 z-10 relative">
+    <div class="text-center mb-16">
+      <h2 class="text-zinc-500 text-xs font-bold uppercase tracking-widest mb-2">Help Center</h2>
+      <h3 class="text-3xl md:text-4xl font-extrabold text-white">Contact & Support</h3>
+      <p class="text-zinc-400 text-sm mt-2">Get answers to critical queries or drop a suggestion message.</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      
+      <!-- FAQ Accordions -->
+      <div class="space-y-4">
+        <h4 class="text-white font-bold text-lg mb-6 flex items-center gap-2">
+          <i data-lucide="help-circle" class="w-5 h-5 text-modernPurple"></i> Frequently Asked Questions
+        </h4>
+        
+        <div class="glass-panel rounded-xl border border-white/5 overflow-hidden transition-all duration-300">
+          <button onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('i').classList.toggle('rotate-180')" class="w-full px-5 py-4 flex items-center justify-between text-left focus:outline-none">
+            <span class="text-white font-semibold text-sm">How does the SOS countdown work?</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-zinc-400 transform transition-transform duration-200"></i>
+          </button>
+          <div class="hidden px-5 pb-4 text-zinc-400 text-xs leading-relaxed border-t border-white/5 pt-3">
+            When you click Activate SOS, a 5-second countdown rings. This gives you time to cancel if triggered by accident. Once finished, emergency SMS alerts with GPS pins are sent out immediately.
+          </div>
+        </div>
+
+        <div class="glass-panel rounded-xl border border-white/5 overflow-hidden transition-all duration-300">
+          <button onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('i').classList.toggle('rotate-180')" class="w-full px-5 py-4 flex items-center justify-between text-left focus:outline-none">
+            <span class="text-white font-semibold text-sm">Is there any backend or fee required?</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-zinc-400 transform transition-transform duration-200"></i>
+          </button>
+          <div class="hidden px-5 pb-4 text-zinc-400 text-xs leading-relaxed border-t border-white/5 pt-3">
+            WSA utilizes a Supabase database backend to secure message pings, contact submissions, and logins safely.
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Form (Supabase Connected) -->
+      <div class="glass-panel p-6 sm:p-8 rounded-3xl border border-white/5">
+        <h4 class="text-white font-bold text-lg mb-6 flex items-center gap-2">
+          <i data-lucide="mail" class="w-5 h-5 text-modernPurple"></i> Drop Us a Suggestion
+        </h4>
+        
+        <form id="contact-form-element" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="text-zinc-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Your Name</label>
+              <input type="text" id="contact-name" required class="w-full bg-zinc-900 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-zinc-300 focus:outline-none focus:border-purple-500">
+            </div>
+            <div>
+              <label class="text-zinc-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Email Address</label>
+              <input type="email" id="contact-email" required class="w-full bg-zinc-900 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-zinc-300 focus:outline-none focus:border-purple-500">
+            </div>
+          </div>
+          <div>
+            <label class="text-zinc-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Message Subject</label>
+            <input type="text" id="contact-subject" required class="w-full bg-zinc-900 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-zinc-300 focus:outline-none focus:border-purple-500">
+          </div>
+          <div>
+            <label class="text-zinc-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Message Content</label>
+            <textarea id="contact-message" required rows="4" class="w-full bg-zinc-900 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-zinc-300 focus:outline-none focus:border-purple-500 resize-none"></textarea>
+          </div>
+          
+          <button type="submit" class="w-full py-3 rounded-xl font-bold bg-purple-600 hover:bg-purple-700 text-white transition duration-300">
+            Submit Support Ticket
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== PREMIUM DARK FOOTER ==================== -->
+  <footer class="bg-zinc-950 border-t border-white/5 py-12 relative z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+      
+      <!-- WSA Info -->
+      <div class="flex flex-col gap-4">
+        <a href="#" class="flex items-center gap-2 group w-max">
+          <div class="p-2 rounded-xl bg-gradient-to-tr from-emergencyRed to-modernPurple">
+            <i data-lucide="shield-alert" class="w-5 h-5 text-white"></i>
+          </div>
+          <span class="text-white font-extrabold text-base tracking-tight">WSA</span>
+        </a>
+        <p class="text-zinc-500 text-xs leading-relaxed max-w-xs">
+          Empowering through smart technological design. One tap leads alerts to your trusted circle.
+        </p>
+        <span class="text-zinc-600 text-[10px] block mt-2">© 2026 WSA Inc. All Rights Reserved.</span>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="flex flex-col gap-3">
+        <h5 class="text-white text-xs font-bold uppercase tracking-wider mb-2">Platform</h5>
+        <a href="#" class="text-zinc-500 hover:text-white text-xs transition">Safety Home</a>
+        <a href="#features" class="text-zinc-500 hover:text-white text-xs transition">System Features</a>
+        <a href="#dashboard" class="text-zinc-500 hover:text-white text-xs transition font-semibold">User Dashboard</a>
+        <a href="empowerment.html" class="text-zinc-500 hover:text-white text-xs transition">Feminism & Empowerment</a>
+      </div>
+
+      <!-- Legal Links -->
+      <div class="flex flex-col gap-3">
+        <h5 class="text-white text-xs font-bold uppercase tracking-wider mb-2">Legal & Privacy</h5>
+        <a href="#" onclick="showToast('Privacy Policy simulator.', 'info')" class="text-zinc-500 hover:text-white text-xs transition">Privacy Charter</a>
+        <a href="#" onclick="showToast('Terms of Service simulator.', 'info')" class="text-zinc-500 hover:text-white text-xs transition">Terms & Regulations</a>
+      </div>
+
+      <!-- Newsletter Form -->
+      <div class="flex flex-col gap-4">
+        <h5 class="text-white text-xs font-bold uppercase tracking-wider">Join Safety Newsletter</h5>
+        <p class="text-zinc-500 text-xs leading-relaxed">Weekly tips, local news digest, and seminar sign-ups.</p>
+        <form id="newsletter-form-element" class="flex gap-2">
+          <input type="email" id="newsletter-email" required placeholder="name@email.com" class="flex-1 bg-zinc-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-zinc-300 focus:outline-none focus:border-purple-500">
+          <button type="submit" class="p-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white transition shrink-0">
+            <i data-lucide="send" class="w-4 h-4"></i>
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ==================== FLOATING INTERACTIVE AI CHATBOT ==================== -->
+  <div class="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3 select-none">
+    
+    <div id="chatbot-widget-panel" class="hidden w-[330px] sm:w-[360px] h-[450px] rounded-2xl glass-panel border border-white/10 flex-col overflow-hidden shadow-2xl relative">
+      <div class="bg-gradient-to-r from-modernPurple to-purple-800 p-4 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="p-1.5 rounded-lg bg-white/10 text-white">
+            <i data-lucide="bot" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h4 class="text-white font-bold text-sm leading-tight">Safety Assistant</h4>
+            <span class="text-[10px] text-purple-200 block mt-0.5">Automated Active Guide</span>
+          </div>
+        </div>
+        <button onclick="toggleChatWidget()" class="text-purple-200 hover:text-white transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div id="chat-messages-body" class="flex-1 p-4 overflow-y-auto space-y-3 bg-zinc-950/20 flex flex-col">
+        <!-- Messages appended dynamically -->
+      </div>
+
+      <div class="px-4 py-2 border-t border-white/5 bg-zinc-950/45 overflow-x-auto whitespace-nowrap scrollbar-none flex gap-2">
+        <button onclick="sendSuggestedPrompt('What to do if followed?')" class="px-3 py-1.5 rounded-full bg-zinc-900 border border-white/5 text-zinc-300 hover:bg-purple-900/30 hover:text-purple-300 hover:border-purple-500/20 text-xs transition">🚶 Followed?</button>
+        <button onclick="sendSuggestedPrompt('Safety cab rules')" class="px-3 py-1.5 rounded-full bg-zinc-900 border border-white/5 text-zinc-300 hover:bg-purple-900/30 hover:text-purple-300 hover:border-purple-500/20 text-xs transition">🚕 Cab Check</button>
+        <button onclick="sendSuggestedPrompt('Night travel tips')" class="px-3 py-1.5 rounded-full bg-zinc-900 border border-white/5 text-zinc-300 hover:bg-purple-900/30 hover:text-purple-300 hover:border-purple-500/20 text-xs transition">🌙 Night Walk</button>
+      </div>
+
+      <div class="p-3 border-t border-white/10 bg-zinc-950 flex gap-2">
+        <input type="text" id="chat-input-field" placeholder="Ask anything about safety..." class="flex-1 bg-zinc-900 border border-white/10 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-purple-500 placeholder-zinc-600">
+        <button id="chat-send-btn" class="p-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white transition">
+          <i data-lucide="send" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+
+    <button onclick="toggleChatWidget()" class="w-14 h-14 rounded-full bg-purple-600 hover:bg-purple-500 text-white flex items-center justify-center shadow-xl shadow-purple-500/25 hover:scale-105 transition duration-300">
+      <i data-lucide="message-square" class="w-6 h-6"></i>
+    </button>
+  </div>
+
+  <!-- ==================== SOS MODAL COUNTDOWN OVERLAY ==================== -->
+  <div id="sos-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm items-center justify-center p-4">
+    <div class="glass-panel max-w-sm w-full p-8 rounded-3xl border border-red-500/30 text-center flex flex-col items-center">
+      <div class="p-4 rounded-full bg-red-500/10 text-emergencyRed mb-4 animate-ping">
+        <i data-lucide="alert-triangle" class="w-10 h-10"></i>
+      </div>
+      <h3 class="text-white text-2xl font-extrabold">EMERGENCY SOS TRIGGER</h3>
+      <p class="text-zinc-400 text-sm mt-2 max-w-xs mx-auto">Sending emergency GPS broadcasts and alerts to guardians in:</p>
+      
+      <span id="sos-countdown-text" class="text-red-500 text-7xl font-extrabold font-mono my-6 leading-none">5</span>
+      
+      <button onclick="cancelSOS()" class="w-full py-3.5 rounded-xl font-bold bg-zinc-800 hover:bg-zinc-700 text-white border border-white/10 transition">
+        Cancel Alert
+      </button>
+    </div>
+  </div>
+
+  <!-- ==================== EMERGENCY ACTIVE OVERLAY ==================== -->
+  <div id="emergency-active-overlay" class="hidden fixed inset-0 z-50 bg-red-950/80 backdrop-blur-md items-center justify-center p-4">
+    <div class="glass-panel max-w-md w-full p-8 rounded-3xl border border-red-500/40 text-center flex flex-col items-center relative overflow-hidden">
+      <div class="absolute inset-0 bg-red-950/15 animate-pulse"></div>
+      
+      <div class="relative z-10 flex flex-col items-center">
+        <div class="w-20 h-20 rounded-full bg-red-500/20 text-red-500 flex items-center justify-center mb-6 animate-pulse border border-red-500/30">
+          <i data-lucide="shield-alert" class="w-10 h-10"></i>
+        </div>
+        <h3 class="text-red-500 text-3xl font-extrabold tracking-tight">EMERGENCY ACTIVE</h3>
+        <p class="text-zinc-300 text-sm max-w-xs mx-auto mt-2 leading-relaxed">
+          Broadcasting live location. Distress siren sounding. High-priority contacts notified.
+        </p>
+        
+        <div class="my-6 p-4 rounded-2xl bg-zinc-950/60 border border-white/5 w-full text-left space-y-2">
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-zinc-500 font-bold uppercase">Incident ID</span>
+            <span class="text-red-400 font-mono font-bold">WSA-982-EMG</span>
+          </div>
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-zinc-500 font-bold uppercase">SMS Alerts Dispatch</span>
+            <span class="text-green-400 font-bold flex items-center gap-1">
+              <i data-lucide="check-circle" class="w-3 h-3"></i> Sent
+            </span>
+          </div>
+        </div>
+
+        <button onclick="dismissEmergencyOverlay()" class="w-full py-4 rounded-xl font-bold bg-white text-zinc-950 hover:bg-zinc-200 transition shadow-lg shadow-white/10">
+          I am Safe (Dismiss Alerts)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== GEOLOCATION FAMILY CONSENT WARNING MODAL ==================== -->
+  <div id="location-consent-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-sm items-center justify-center p-4">
+    <div class="glass-panel max-w-sm w-full p-6 sm:p-8 rounded-3xl border border-white/10 text-center flex flex-col items-center">
+      <div class="p-3 rounded-full bg-purple-500/10 text-modernPurple mb-4">
+        <i data-lucide="navigation" class="w-8 h-8"></i>
+      </div>
+      <h3 class="text-white text-xl font-bold">Live Location Consent</h3>
+      <p class="text-zinc-400 text-xs mt-3 leading-relaxed">
+        WSA would like to access your device's active GPS Geolocation API to stream your movement directly to emergency contacts and dashboard analytics. Do you authorize this?
+      </p>
+
+      <div class="flex flex-col gap-2.5 w-full mt-6">
+        <button onclick="grantLocationConsent()" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-sm transition">
+          Authorize Sharing
+        </button>
+        <button onclick="cancelLocationConsent()" class="w-full py-2.5 rounded-xl bg-zinc-800 text-zinc-400 hover:text-white transition text-sm font-semibold">
+          Deny Access
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SIGN UP SUPABASE MODAL ==================== -->
+  <div id="signup-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-sm items-center justify-center p-4">
+    <div class="glass-panel max-w-sm w-full p-6 sm:p-8 rounded-3xl border border-white/10">
+      <div class="flex items-center justify-between mb-6 pb-2 border-b border-white/5">
+        <h3 class="text-white text-lg font-bold">Create WSA Account</h3>
+        <button onclick="closeModal('signup-modal')" class="text-zinc-500 hover:text-white transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="signup-form-element" class="space-y-4">
+        <div>
+          <label class="text-zinc-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Email Address</label>
+          <input type="email" id="signup-email" required class="w-full bg-zinc-900 border border-white/10 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-purple-500">
+        </div>
+        <div>
+          <label class="text-zinc-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Secure Password</label>
+          <input type="password" id="signup-password" required class="w-full bg-zinc-900 border border-white/10 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-purple-500">
+        </div>
+
+        <button type="submit" class="w-full py-3 rounded-xl font-bold bg-purple-600 hover:bg-purple-700 text-white transition mt-3">
+          Sign Up
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== LOG IN SUPABASE MODAL ==================== -->
+  <div id="login-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-sm items-center justify-center p-4">
+    <div class="glass-panel max-w-sm w-full p-6 sm:p-8 rounded-3xl border border-white/10">
+      <div class="flex items-center justify-between mb-6 pb-2 border-b border-white/5">
+        <h3 class="text-white text-lg font-bold">Log In to Safety Assistant</h3>
+        <button onclick="closeModal('login-modal')" class="text-zinc-500 hover:text-white transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="login-form-element" class="space-y-4">
+        <div>
+          <label class="text-zinc-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Email Address</label>
+          <input type="email" id="login-email" required class="w-full bg-zinc-900 border border-white/10 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-purple-500">
+        </div>
+        <div>
+          <label class="text-zinc-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Password</label>
+          <input type="password" id="login-password" required class="w-full bg-zinc-900 border border-white/10 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-purple-500">
+        </div>
+
+        <button type="submit" class="w-full py-3 rounded-xl font-bold bg-purple-600 hover:bg-purple-700 text-white transition mt-3">
+          Log In
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== ADD/EDIT TRUSTED CONTACT MODAL ==================== -->
+  <div id="add-contact-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-sm items-center justify-center p-4">
+    <div class="glass-panel max-w-sm w-full p-6 sm:p-8 rounded-3xl border border-white/10">
+      <div class="flex items-center justify-between mb-6 pb-2 border-b border-white/5">
+        <h3 id="contact-form-title" class="text-white text-lg font-bold">Add Trusted Contact</h3>
+        <button onclick="closeAddContactModal()" class="text-zinc-500 hover:text-white transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form onsubmit="saveContact(event)" class="space-y-4">
+        <input type="hidden" id="contact-id-field">
+        <div>
+          <label class="text-zinc-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Contact Name</label>
+          <input type="text" id="contact-name-field" required placeholder="e.g. Sarah Sister" class="w-full bg-zinc-900 border border-white/10 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-purple-500">
+        </div>
+        <div>
+          <label class="text-zinc-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Relationship</label>
+          <input type="text" id="contact-relation-field" required placeholder="e.g. Sister, Father, Friend" class="w-full bg-zinc-900 border border-white/10 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-purple-500">
+        </div>
+        <div>
+          <label class="text-zinc-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Contact Number</label>
+          <input type="tel" id="contact-phone-field" required placeholder="e.g. +91 98765 43210" class="w-full bg-zinc-900 border border-white/10 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-purple-500">
+        </div>
+        <div>
+          <label class="text-zinc-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Alert Priority Badge</label>
+          <select id="contact-priority-field" class="w-full bg-zinc-900 border border-white/10 rounded-xl px-3 py-2 text-sm text-zinc-300 focus:outline-none focus:border-purple-500">
+            <option value="high">High Priority (Gets immediate SOS SMS)</option>
+            <option value="medium">Medium Priority (Secondary notifications)</option>
+            <option value="low">Low Priority (View status only)</option>
+          </select>
+        </div>
+
+        <div class="flex gap-3 pt-3">
+          <button type="button" onclick="closeAddContactModal()" class="flex-1 py-2.5 rounded-xl bg-zinc-800 text-zinc-400 hover:text-white transition text-sm font-semibold">
+            Cancel
+          </button>
+          <button type="submit" class="flex-1 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white transition text-sm font-bold">
+            Save Contact
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Siren flashing strobe -->
+  <div id="siren-flashing-strobe" class="hidden fixed inset-0 z-40 pointer-events-none opacity-20 emergency-strobe"></div>
+
+  <!-- Fake Call Screen -->
+  <div id="fake-call-screen-overlay" class="hidden fixed inset-0 z-50 bg-zinc-950 items-center justify-center">
+    <div id="fake-call-ringing-panel" class="w-full max-w-md h-full flex flex-col justify-between py-16 px-8 text-center relative">
+      <div class="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none">
+        <div class="wave-ring wave-ring-1 w-64 h-64"></div>
+        <div class="wave-ring wave-ring-2 w-64 h-64"></div>
+        <div class="wave-ring wave-ring-3 w-64 h-64"></div>
+      </div>
+      
+      <div class="relative z-10">
+        <span class="text-zinc-400 text-xs font-bold uppercase tracking-widest block mb-2 animate-pulse">Incoming Call</span>
+        <h3 id="fake-call-ring-name" class="text-white text-3xl font-extrabold">Mom</h3>
+        <span class="text-zinc-500 text-sm block mt-1">Mobile</span>
+      </div>
+
+      <div class="relative z-10 flex items-center justify-around w-full max-w-xs mx-auto mb-6">
+        <div class="flex flex-col items-center gap-2">
+          <button onclick="declineFakeCall()" class="w-16 h-16 rounded-full bg-red-600 hover:bg-red-500 text-white flex items-center justify-center shadow-lg shadow-red-600/30 transition">
+            <i data-lucide="phone-off" class="w-6 h-6"></i>
+          </button>
+          <span class="text-zinc-500 text-xs font-medium">Decline</span>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <button onclick="acceptFakeCall()" class="w-16 h-16 rounded-full bg-green-500 hover:bg-green-400 text-white flex items-center justify-center shadow-lg shadow-green-500/30 transition animate-bounce">
+            <i data-lucide="phone" class="w-6 h-6"></i>
+          </button>
+          <span class="text-zinc-500 text-xs font-medium">Accept</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="fake-call-active-panel" class="hidden w-full max-w-md h-full flex flex-col justify-between py-16 px-8 text-center">
+      <div>
+        <h3 id="fake-call-active-name" class="text-white text-3xl font-extrabold">Mom</h3>
+        <span id="fake-call-duration-timer" class="text-zinc-400 font-mono text-sm block mt-1.5">00:00</span>
+      </div>
+
+      <div class="h-20 flex items-center justify-center gap-1 max-w-xs mx-auto">
+        <span class="w-1 h-4 bg-zinc-600 rounded animate-pulse"></span>
+        <span class="w-1 h-8 bg-zinc-600 rounded animate-pulse" style="animation-delay: 0.1s"></span>
+        <span class="w-1 h-12 bg-zinc-500 rounded animate-pulse" style="animation-delay: 0.2s"></span>
+        <span class="w-1 h-6 bg-zinc-500 rounded animate-pulse" style="animation-delay: 0.3s"></span>
+        <span class="w-1 h-10 bg-zinc-600 rounded animate-pulse" style="animation-delay: 0.4s"></span>
+        <span class="w-1 h-5 bg-zinc-600 rounded animate-pulse" style="animation-delay: 0.5s"></span>
+      </div>
+
+      <div class="space-y-8">
+        <div class="grid grid-cols-3 gap-6 max-w-xs mx-auto text-zinc-500 text-xs">
+          <button onclick="showToast('Mute simulation.', 'info')" class="flex flex-col items-center gap-2 hover:text-white transition">
+            <div class="p-3 rounded-full bg-zinc-900 border border-white/5"><i data-lucide="mic-off" class="w-5 h-5"></i></div>
+            <span>Mute</span>
+          </button>
+          <button onclick="showToast('Keypad simulation.', 'info')" class="flex flex-col items-center gap-2 hover:text-white transition">
+            <div class="p-3 rounded-full bg-zinc-900 border border-white/5"><i data-lucide="grid" class="w-5 h-5"></i></div>
+            <span>Keypad</span>
+          </button>
+          <button onclick="showToast('Speaker simulation.', 'info')" class="flex flex-col items-center gap-2 hover:text-white transition">
+            <div class="p-3 rounded-full bg-zinc-900 border border-white/5"><i data-lucide="volume-2" class="w-5 h-5"></i></div>
+            <span>Speaker</span>
+          </button>
+        </div>
+
+        <button onclick="endFakeCall()" class="w-16 h-16 rounded-full bg-red-600 hover:bg-red-500 text-white flex items-center justify-center shadow-lg shadow-red-600/30 transition mx-auto">
+          <i data-lucide="phone-off" class="w-6 h-6"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast component -->
+  <div id="safety-toast" class="safety-alert-toast fixed bottom-6 right-6 z-50 glass-panel p-4 rounded-xl flex items-center gap-3 max-w-sm">
+    <div class="toast-border-indicator w-2 h-10 rounded-full bg-purple-500"></div>
+    <div>
+      <h5 class="text-white text-xs font-bold uppercase tracking-wider">Safety Notification</h5>
+      <p id="safety-toast-text" class="text-zinc-400 text-xs mt-0.5">Alert status updated.</p>
+    </div>
+  </div>
+
+  <!-- Lucide Script -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+
+  <!-- Core App Logic -->
+  <script src="app.js"></script>
+
+</body>
+</html>

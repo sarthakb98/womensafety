@@ -1,0 +1,282 @@
+/* Custom Premium Styling - Women Safety Assistant */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --bg-primary: #0A0A0A;
+  --bg-secondary: #121212;
+  --bg-card: rgba(30, 30, 30, 0.65);
+  --accent-red: #FF4D4D;
+  --accent-purple: #8B5CF6;
+  --text-white: #FFFFFF;
+  --text-gray: #A3A3A3;
+  --font-outfit: 'Outfit', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-outfit);
+  background-color: var(--bg-primary);
+  color: var(--text-white);
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: #2A2A2A;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3E3E3E;
+}
+
+/* Glassmorphism Classes */
+.glass-panel {
+  background: rgba(30, 30, 30, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+}
+
+.glass-panel-hover {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-panel-hover:hover {
+  transform: translateY(-4px);
+  background: rgba(30, 30, 30, 0.65);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 12px 40px 0 rgba(139, 92, 246, 0.15); /* Soft purple glow on hover */
+}
+
+.glass-panel-danger-hover:hover {
+  transform: translateY(-4px);
+  background: rgba(30, 30, 30, 0.65);
+  border-color: rgba(255, 77, 77, 0.3);
+  box-shadow: 0 12px 40px 0 rgba(255, 77, 77, 0.2); /* Soft red glow on hover */
+}
+
+/* Glass Navbar */
+.glass-navbar {
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Background Gradients & Glow Blobs */
+.glow-blob-red {
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(255, 77, 77, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+  border-radius: 50%;
+  filter: blur(40px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.glow-blob-purple {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, rgba(0, 0, 0, 0) 70%);
+  border-radius: 50%;
+  filter: blur(50px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Pulse Animation for SOS Button */
+@keyframes sosPulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 20px rgba(255, 77, 77, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(255, 77, 77, 0);
+  }
+}
+
+.sos-pulse-btn {
+  animation: sosPulse 2s infinite;
+  box-shadow: 0 0 35px rgba(255, 77, 77, 0.5);
+  transition: all 0.3s ease;
+}
+.sos-pulse-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 50px rgba(255, 77, 77, 0.8);
+}
+
+/* Flashing Emergency Overlay */
+@keyframes emergencyFlashing {
+  0%, 100% {
+    background-color: rgba(255, 77, 77, 0.4);
+  }
+  50% {
+    background-color: rgba(0, 0, 0, 0.85);
+  }
+}
+.emergency-strobe {
+  animation: emergencyFlashing 0.8s infinite;
+}
+
+/* Floating Elements Animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+.floating-element {
+  animation: float 6s ease-in-out infinite;
+}
+
+.floating-element-delayed {
+  animation: float 7s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+/* Dynamic Ring Wave / Audio Wave for Fake Call */
+@keyframes wavePulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+.wave-ring {
+  position: absolute;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  animation: wavePulse 2s infinite ease-out;
+}
+.wave-ring-1 {
+  animation-delay: 0s;
+}
+.wave-ring-2 {
+  animation-delay: 0.6s;
+}
+.wave-ring-3 {
+  animation-delay: 1.2s;
+}
+
+/* AI Chat Message Styles */
+.message-bubble {
+  max-width: 80%;
+  padding: 12px 16px;
+  border-radius: 18px;
+  font-size: 0.925rem;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+.message-user {
+  background: var(--accent-purple);
+  color: white;
+  border-bottom-right-radius: 4px;
+  margin-left: auto;
+}
+.message-bot {
+  background: rgba(42, 42, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: #ECECEC;
+  border-bottom-left-radius: 4px;
+}
+
+/* Skeleton Loading Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+.skeleton {
+  background: linear-gradient(90deg, #1A1A1A 25%, #2A2A2A 50%, #1A1A1A 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Check-In Progress Ring */
+.progress-ring-circle {
+  transition: stroke-dashoffset 0.35s;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+/* Custom Alert Banner Toast */
+.safety-alert-toast {
+  transform: translateY(150%);
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.safety-alert-toast.active {
+  transform: translateY(0);
+}
+
+/* Map Location Pulse Dot */
+.map-pulse-dot {
+  width: 12px;
+  height: 12px;
+  background-color: #3B82F6;
+  border-radius: 50%;
+  position: relative;
+}
+.map-pulse-dot::after {
+  content: '';
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(59, 130, 246, 0.5);
+  border-radius: 50%;
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  animation: wavePulse 1.5s infinite ease-out;
+}
+
+/* Map Path Drawing animation */
+@keyframes dash {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.map-path-draw {
+  stroke-dasharray: 8;
+  animation: dash 30s linear infinite;
+}
+
+/* Gradient text */
+.text-gradient-red-purple {
+  background: linear-gradient(135deg, var(--accent-red) 0%, var(--accent-purple) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.text-gradient-purple-blue {
+  background: linear-gradient(135deg, var(--accent-purple) 0%, #3B82F6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.text-gradient-red-orange {
+  background: linear-gradient(135deg, var(--accent-red) 0%, #F59E0B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.bg-gradient-emergency {
+  background: linear-gradient(135deg, var(--accent-red) 0%, var(--accent-purple) 100%);
+}
