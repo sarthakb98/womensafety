@@ -296,7 +296,24 @@ document.addEventListener('DOMContentLoaded', () => {
     if(m) {
       m.classList.add('hidden');
       m.classList.remove('flex');
+      // If closing map modal, clean up iframe src to save resource overhead
+      if (modalId === 'map-modal') {
+        const iframe = document.getElementById('map-modal-iframe');
+        if (iframe) iframe.src = '';
+      }
     }
+  };
+
+  window.openMapRoute = (placeName, embedUrl) => {
+    const title = document.getElementById('map-modal-title');
+    const iframe = document.getElementById('map-modal-iframe');
+    
+    if (title) title.innerHTML = `<i data-lucide="map" class="w-5 h-5 text-modernPurple"></i> ${escapeHtml(placeName)} Route`;
+    if (iframe) iframe.src = embedUrl;
+    
+    openModal('map-modal');
+    lucide.createIcons();
+    addLog(`Opened route map for: ${placeName}`, 'info');
   };
 
   // --- TOAST NOTIFICATIONS ---
