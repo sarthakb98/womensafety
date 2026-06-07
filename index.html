@@ -712,7 +712,7 @@
                 <p class="text-zinc-500 text-xs mt-0.5">Verified Station • 0.8 km</p>
               </div>
             </div>
-            <button onclick="openMapRoute('Connaught Place Police Station', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3501.9912189068614!2d77.21162477593214!3d28.630025275666128!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfd4973d3e44d%3A0x3de3e2cdec658b1b!2sConnaught%20Place%20Police%20Station!5e0!3m2!1sen!2sin!4v1780805381525!5m2!1sen!2sin')" class="text-xs font-bold text-modernPurple hover:underline">Get Route</button>
+            <button onclick="showToast('Navigating to Station...', 'success')" class="text-xs font-bold text-modernPurple hover:underline">Get Route</button>
           </div>
 
           <div class="flex items-center justify-between p-3.5 rounded-xl bg-zinc-900/40 border border-white/5">
@@ -725,7 +725,7 @@
                 <p class="text-zinc-500 text-xs mt-0.5">24/7 Medical Room • 1.4 km</p>
               </div>
             </div>
-            <button onclick="openMapRoute('Dr. Ram Manohar Lohia Hospital', 'https://maps.google.com/maps?q=Dr.+Ram+Manohar+Lohia+Hospital,+New+Delhi&t=&z=14&ie=UTF8&iwloc=&output=embed')" class="text-xs font-bold text-modernPurple hover:underline">Get Route</button>
+            <button onclick="showToast('Navigating to Hospital...', 'success')" class="text-xs font-bold text-modernPurple hover:underline">Get Route</button>
           </div>
 
           <div class="flex items-center justify-between p-3.5 rounded-xl bg-zinc-900/40 border border-white/5">
@@ -738,7 +738,7 @@
                 <p class="text-zinc-500 text-xs mt-0.5">Crowded Metro Hub • 0.3 km</p>
               </div>
             </div>
-            <button onclick="openMapRoute('Rajiv Chowk Metro Station', 'https://maps.google.com/maps?q=Rajiv+Chowk+Metro+Station,+New+Delhi&t=&z=14&ie=UTF8&iwloc=&output=embed')" class="text-xs font-bold text-modernPurple hover:underline">Get Route</button>
+            <button onclick="showToast('Navigating to Metro...', 'success')" class="text-xs font-bold text-modernPurple hover:underline">Get Route</button>
           </div>
 
         </div>
@@ -941,11 +941,11 @@
   <section class="border-y border-white/5 bg-zinc-950/30 py-12 z-10 relative">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
       <div>
-        <span class="text-gradient-red-purple text-4xl font-extrabold block">25,000+</span>
+        <span class="text-gradient-red-purple text-4xl font-extrabold block">0</span>
         <span class="text-zinc-500 text-xs uppercase font-bold tracking-wider mt-2 block">Active Protections</span>
       </div>
       <div>
-        <span class="text-gradient-red-purple text-4xl font-extrabold block">4.9/5</span>
+        <span class="text-gradient-red-purple text-4xl font-extrabold block">0/5</span>
         <span class="text-zinc-500 text-xs uppercase font-bold tracking-wider mt-2 block">User Satisfaction Rating</span>
       </div>
       <div>
@@ -953,7 +953,7 @@
         <span class="text-zinc-500 text-xs uppercase font-bold tracking-wider mt-2 block">Alert Dispatch Speed</span>
       </div>
       <div>
-        <span class="text-gradient-red-purple text-4xl font-extrabold block">150+</span>
+        <span class="text-gradient-red-purple text-4xl font-extrabold block">0+</span>
         <span class="text-zinc-500 text-xs uppercase font-bold tracking-wider mt-2 block">Safe Places Listed</span>
       </div>
     </div>
@@ -1327,36 +1327,6 @@
           </button>
         </div>
       </form>
-    </div>
-  </div>
-
-  <!-- ==================== GOOGLE MAP MODAL ==================== -->
-  <div id="map-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-sm items-center justify-center p-4">
-    <div class="glass-panel max-w-3xl w-full p-6 rounded-3xl border border-white/10 flex flex-col gap-4">
-      <div class="flex items-center justify-between pb-2 border-b border-white/5">
-        <h3 id="map-modal-title" class="text-white text-lg font-bold flex items-center gap-2">
-          <i data-lucide="map" class="w-5 h-5 text-modernPurple"></i> Safe Place Route Map
-        </h3>
-        <button onclick="closeModal('map-modal')" class="text-zinc-500 hover:text-white transition">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-      <div class="relative w-full aspect-video rounded-xl overflow-hidden bg-zinc-950 border border-white/5">
-        <iframe 
-          id="map-modal-iframe"
-          src="" 
-          class="w-full h-full border-0" 
-          allowfullscreen="" 
-          loading="lazy" 
-          referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
-      </div>
-      <div class="flex justify-between items-center text-xs text-zinc-500 pt-2">
-        <span>Google Maps Verified Safe Zone</span>
-        <button onclick="closeModal('map-modal')" class="px-5 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs transition">
-          Close Route
-        </button>
-      </div>
     </div>
   </div>
 
